@@ -34,6 +34,10 @@ pokemons = [
     }
 ]
 
+@app.route('/', methods=['GET'])
+def pokemons():
+    return jsonify('Bienvenido a la app de Pokemon'), 200
+
 @app.route('/pokemons', methods=['GET'])
 def get_pokemons():
     """
