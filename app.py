@@ -80,6 +80,26 @@ def get_pokemon_by_id(pokemon_id):
     else:
         return jsonify({"error": "Pokémon no encontrado"}), 404
 
+#Borrar por id
+@app.route('/pokemons/<pokemon_id>', methods=['DELETE'])
+def delete_pokemon(pokemon_id):
+    """
+    Elimina un Pokémon por su ID.
+    """
+    # Buscar el Pokémon por ID
+    pokemon = next((p for p in pokemons if p["id"] == int(pokemon_id)), None)
+
+    if not pokemon:
+        return jsonify({"error": "Pokémon no encontrado"}), 404
+
+    # Eliminarlo de la lista
+    pokemons.remove(pokemon)
+
+    return jsonify({
+        "message": "Pokémon eliminado exitosamente",
+        "pokemon": pokemon
+    }), 200
+
 if __name__ == '__main__':
     # Ejecuta la aplicación en modo debug para desarrollo
     app.run(debug=True)
