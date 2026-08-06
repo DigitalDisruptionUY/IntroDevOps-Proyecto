@@ -46,8 +46,26 @@ def create_pokemon():
     """
     Crea un nuevo Pokémon.
     """
+    
+    # Obtener los datos del cuerpo de la solicitud
     data = request.get_json()
-    return jsonify(data), 201
+
+    #Validar que hayan datos
+    if not data:
+        return jsonify({"error": "No se proporcionaron datos"}), 400
+    
+    #Validar que el id no existe previamente
+    if any(pokemon['id'] == data['id'] for pokemon in pokemons):
+        return jsonify({"error": "El Pokémon con este ID ya existe"}), 400
+
+    #Agregar el nuevo Pokémon a la lista
+    pokemons.append(data)
+
+    # Devolver una respuesta exitosa con el Pokémon creado
+    return jsonify({
+        "message": "Pokémon creado exitosamente",
+        "pokemon": data
+    }), 201
 
 if __name__ == '__main__':
     # Ejecuta la aplicación en modo debug para desarrollo
