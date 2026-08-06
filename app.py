@@ -80,6 +80,36 @@ def get_pokemon_by_id(pokemon_id):
     else:
         return jsonify({"error": "Pokémon no encontrado"}), 404
 
+#modificar por id
+@app.route('/pokemons/<pokemon_id>', methods=['PUT'])
+def update_pokemon(pokemon_id):
+    """
+    Modifica un Pokémon existente por su ID.
+    """
+    # Obtener los datos del cuerpo de la solicitud
+    data = request.get_json()
+
+    # Validar que hayan datos
+    if not data:
+        return jsonify({"error": "No se proporcionaron datos"}), 400
+
+    # Buscar el Pokémon por ID
+    pokemon = next((p for p in pokemons if p["id"] == int(pokemon_id)), None)
+
+    if not pokemon:
+        return jsonify({"error": "Pokémon no encontrado"}), 404
+
+    # Actualizar los campos del Pokémon (evitando cambiar el id)
+    for key, value in data.items():
+        if key != "id":
+            pokemon[key] = value
+
+    return jsonify({
+        "message": "Pokémon actualizado exitosamente",
+        "pokemon": pokemon
+    }), 200
+
+
 #Borrar por id
 @app.route('/pokemons/<pokemon_id>', methods=['DELETE'])
 def delete_pokemon(pokemon_id):
