@@ -1,4 +1,4 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 
 app = Flask(__name__)
 
@@ -41,6 +41,32 @@ def get_pokemons():
     """
     return jsonify(pokemons), 200
 
+@app.route('/pokemons', methods=['POST'])
+def create_pokemon():
+    """
+    Crea un nuevo Pokémon.
+    """
+    
+    # Obtener los datos del cuerpo de la solicitud
+    data = request.get_json()
+
+    #Validar que hayan datos
+    if not data:
+        return jsonify({"error": "No se proporcionaron datos"}), 400
+    
+    #Validar que el id no existe previamente
+    if any(pokemon['id'] == data['id'] for pokemon in pokemons):
+        return jsonify({"error": "El Pokémon con este ID ya existe"}), 400
+
+    #Agregar el nuevo Pokémon a la lista
+    pokemons.append(data)
+
+    # Devolver una respuesta exitosa con el Pokémon creado
+    return jsonify({
+        "message": "Pokémon creado exitosamente",
+        "pokemon": data
+    }), 201
+  
 #Obtener por id
 @app.route('/pokemons/<pokemon_id>', methods=['GET'])
 def get_pokemon_by_id(pokemon_id):
