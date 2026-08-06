@@ -1,4 +1,4 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 
 app = Flask(__name__)
 
@@ -40,6 +40,14 @@ def get_pokemons():
     Obtiene la lista de todos los Pokémon.
     """
     return jsonify(pokemons), 200
+
+@app.route('/pokemons', methods=['POST'])
+def create_pokemon():
+    """
+    Crea un nuevo Pokémon.
+    """
+    data = request.get_json()
+    return jsonify(data), 201
 
 if __name__ == '__main__':
     # Ejecuta la aplicación en modo debug para desarrollo
