@@ -41,6 +41,19 @@ def get_pokemons():
     """
     return jsonify(pokemons), 200
 
+#Obtener por id
+@app.route('/pokemons/<pokemon_id>', methods=['GET'])
+def get_pokemon_by_id(pokemon_id):
+    """
+    Obtiene un Pokémon por su ID.
+    """
+    # Recorre la lista de Pokémon y hasta el que tenga el ID especificado, sino ninguno
+    pokemon = next((p for p in pokemons if p["id"] == int(pokemon_id)), None)
+    if pokemon:
+        return jsonify(pokemon), 200
+    else:
+        return jsonify({"error": "Pokémon no encontrado"}), 404
+
 if __name__ == '__main__':
     # Ejecuta la aplicación en modo debug para desarrollo
     app.run(debug=True)
