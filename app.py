@@ -42,7 +42,6 @@ def get_pokemons():
     return jsonify(pokemons), 200
 
 @app.route('/pokemons', methods=['POST'])
-
 def create_pokemon():
     """
     Crea un nuevo Pokémon.
@@ -107,6 +106,27 @@ def update_pokemon(pokemon_id):
 
     return jsonify({
         "message": "Pokémon actualizado exitosamente",
+        "pokemon": pokemon
+    }), 200
+
+
+#Borrar por id
+@app.route('/pokemons/<pokemon_id>', methods=['DELETE'])
+def delete_pokemon(pokemon_id):
+    """
+    Elimina un Pokémon por su ID.
+    """
+    # Buscar el Pokémon por ID
+    pokemon = next((p for p in pokemons if p["id"] == int(pokemon_id)), None)
+
+    if not pokemon:
+        return jsonify({"error": "Pokémon no encontrado"}), 404
+
+    # Eliminarlo de la lista
+    pokemons.remove(pokemon)
+
+    return jsonify({
+        "message": "Pokémon eliminado exitosamente",
         "pokemon": pokemon
     }), 200
 
